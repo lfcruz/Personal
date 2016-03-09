@@ -1,36 +1,5 @@
 <?php
-// +------------------------------------------------------------------------+
-// | JAK8583.class.php                                                      |
-// +------------------------------------------------------------------------+
-// | Copyright (c) Jimmi Kembaren 2009. All rights reserved.                |
-// | Version       0.7                                                      |
-// |		customize bit 29 & 31					    |
-// | Last modified 16/05/2009                                               |
-// | Email         jimmi.kembaren@gmail.com                                 |
-// | Web           http://www.iso8583online.com                             |
-// +------------------------------------------------------------------------+
-// | This program is free software; you can redistribute it and/or modify   |
-// | it under the terms of the GNU General Public License version 2 as      |
-// | published by the Free Software Foundation.                             |
-// |                                                                        |
-// | This program is distributed in the hope that it will be useful,        |
-// | but WITHOUT ANY WARRANTY; without even the implied warranty of         |
-// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          |
-// | GNU General Public License for more details.                           |
-// |                                                                        |
-// | You should have received a copy of the GNU General Public License      |
-// | along with this program; if not, write to the                          |
-// |   Free Software Foundation, Inc., 59 Temple Place, Suite 330,          |
-// |   Boston, MA 02111-1307 USA                                            |
-// |                                                                        |
-// | Please give credit on sites that use class.upload and submit changes   |
-// | of the script so other people can use them as well.                    |
-// | This script is free to use, don't abuse.                               |
-// +------------------------------------------------------------------------+
-//
-
-   
-class JAK8583 {
+class isoPack {
     private $DATA_ELEMENT	= array (
         1	=> array('b', 64, 0),
         2	=> array('an', 19, 1),
@@ -170,23 +139,19 @@ class JAK8583 {
 
 
     
-    /* --------------------------------------------------------------
-        private functions
-       -------------------------------------------------------------- */
+    // Functions -------------------------------------------------------------
     
-    //return data element in correct format
+    //format data element
     private function _packElement($data_element, $data) {
         $result	= "";
 
-        //numeric value
+        //Numeric
         if ($data_element[0]=='n' && is_numeric($data) && strlen($data)<=$data_element[1]) {
             $data	= str_replace(".", "", $data);
             
-            //fix length
             if ($data_element[2]==0) {
                 $result	= sprintf("%0". $data_element[1] ."s", $data);
             }
-            //dinamic length
             else {
                 if (strlen($data) <= $data_element[1]) {                
                     $result	= sprintf("%0". strlen($data_element[1])."d", strlen($data)). $data;
@@ -194,17 +159,15 @@ class JAK8583 {
             }
         }
 
-        //alpha value
+        //Alpha
         if (($data_element[0]=='a' && ctype_alpha($data) && strlen($data)<=$data_element[1]) ||
             ($data_element[0]=='an' && ctype_alnum($data) && strlen($data)<=$data_element[1]) ||
             ($data_element[0]=='z' && strlen($data)<=$data_element[1]) ||
             ($data_element[0]=='ans' && strlen($data)<=$data_element[1])) {
 
-            //fix length
             if ($data_element[2]==0) {
                 $result	= sprintf("% ". $data_element[1] ."s", $data);
             } 
-            //dinamic length
             else {
                 if (strlen($data) <= $data_element[1]) {                
                     $result	= sprintf("%0". strlen($data_element[1])."s", strlen($data)). $data;
@@ -212,9 +175,9 @@ class JAK8583 {
             }
         }
 
-        //bit value
+        //Bit
         if ($data_element[0]=='b' && strlen($data)<=$data_element[1]) {
-            //fix length
+
             if ($data_element[2]==0) {
                 $tmp	= sprintf("%0". $data_element[1] ."d", $data);
 
@@ -228,7 +191,7 @@ class JAK8583 {
         return $result;
     }
 
-    //calculate bitmap from data element    
+    //Calcula el Bitmap    
     private function _calculateBitmap() {	
         $tmp	= sprintf("%064d", 0);    
         $tmp2	= sprintf("%064d", 0);    
@@ -260,7 +223,7 @@ class JAK8583 {
     }
     
     
-    //parse iso string and retrieve mti 
+    //Message Type 
     private function _parseMTI() {
         $this->addMTI(substr($this->_iso, 0, 4));
         if (strlen($this->_mti)==4 && $this->_mti[1]!=0) {
@@ -268,7 +231,7 @@ class JAK8583 {
         }
     }
 
-    //clear all data
+    //Clear Data
     private function _clear() {
         $this->_mti	= '';
         $this->_bitmap	= '';
@@ -276,7 +239,7 @@ class JAK8583 {
         $this->_iso	= '';
     }
 
-    //parse iso string and retrieve bitmap    
+    //Get Bitmap    
     private function _parseBitmap() {
         $this->_valid['bitmap']	= false;
         $inp	= substr($this->_iso, 4, 32);
@@ -294,7 +257,7 @@ class JAK8583 {
             }
             if ($secondary=='') $this->_valid['bitmap']	= true;
         }
-        //save to data element with ? character
+
         $tmp	= $primary. $secondary;
         for ($i=0; $i<strlen($tmp); $i++) {
             if ($tmp[$i]==1) {
@@ -306,7 +269,7 @@ class JAK8583 {
         return $tmp;
     }
 
-    //parse iso string and retrieve data element
+    //Decode ISO to Array
     private function _parseData() {
         if ($this->_data[1]=='?') {
             $inp	= substr($this->_iso, 4+32, strlen($this->_iso)-4-32);
@@ -321,7 +284,7 @@ class JAK8583 {
           foreach ($this->_data as $key=>$val) {
             $this->_valid['de'][$key]	= false;
             if ($this->DATA_ELEMENT[$key][0]!='b') {
-                //fix length
+
                 if ($this->DATA_ELEMENT[$key][2]==0) {
                     $tmp	= substr($inp, 0, $this->DATA_ELEMENT[$key][1]);
                     if (strlen($tmp)==$this->DATA_ELEMENT[$key][1]) {
@@ -335,7 +298,7 @@ class JAK8583 {
                         $inp	= substr($inp, $this->DATA_ELEMENT[$key][1], strlen($inp)-$this->DATA_ELEMENT[$key][1]);
                     }
                 }
-                //dynamic length
+
                 else {
                     $len	= strlen($this->DATA_ELEMENT[$key][1]);
                     $tmp	= substr($inp, 0, $len);
@@ -360,7 +323,7 @@ class JAK8583 {
             }
             else {
                 if ($key>1) {
-                    //fix length
+
                     if ($this->DATA_ELEMENT[$key][2]==0) {
                         $start	= false;
                         for ($i=0; $i<$this->DATA_ELEMENT[$key][1]/4; $i++) {                        
@@ -388,10 +351,10 @@ class JAK8583 {
     }
     
     /* -----------------------------------------------------
-        method
+        Methods
        ----------------------------------------------------- */
 
-    //method: add data element
+    //Add Fields
     public function addData($bit, $data) {
         if ($bit>1 && $bit<129) {
             $this->_data[$bit]	= $this->_packElement($this->DATA_ELEMENT[$bit], $data);
@@ -400,7 +363,7 @@ class JAK8583 {
         }
     }
 
-    //method: add MTI
+    //Add Message Type
     public function addMTI($mti) {
         if (strlen($mti)==4 && ctype_digit($mti)) {
             $this->_mti	= $mti;
@@ -408,28 +371,28 @@ class JAK8583 {
     }	 
     
 
-    //method: retrieve data element
+    //Get Data Array
     public function getData() {
         return $this->_data;
     }
 
-    //method: retrieve bitmap
+    //Get Bitmap
     public function getBitmap() {
         return $this->_bitmap;
     }
 
-    //method: retrieve mti
+    //Get Message Type
     public function getMTI() {
         return $this->_mti;
     }
 
-    //method: retrieve iso with all complete data
+    //Get Full ISO
     public function getISO() {
         $this->_iso	= $this->_mti. $this->_bitmap. implode($this->_data);
         return $this->_iso;
     }
          
-    //method: add ISO string
+    //Push ISO String
     public function addISO($iso) {
         $this->_clear();
         if ($iso!='') {
@@ -440,12 +403,12 @@ class JAK8583 {
         }
     }
     
-    //method: return true if iso string is a valid 8583 format or false if not
+    //Validate ISO Format
     public function validateISO() {
         return $this->_valid['mti'] && $this->_valid['bitmap'] && $this->_valid['data'];
     }
     
-    //method: remove existing data element
+    //Delete Field
     public function removeData($bit) {
         if ($bit>1 && $bit<129) {
             unset($this->_data[$bit]);

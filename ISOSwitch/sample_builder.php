@@ -1,14 +1,16 @@
 <?php
-include_once('JAK8583.class.php');
+include_once('isoPackager.php');
 
-$jak	= new JAK8583();
+$isoMsg = new isoPack();
 
 //add data
-$jak->addMTI('0800');
-$jak->addData(7, date("mdHis"));
-$jak->addData(11, rand(1000, 999999));
-$jak->addData(70, '301');
+$isoMsg->addMTI('0800');
+$isoMsg->addData(7, date("mdHis"));
+$isoMsg->addData(11, rand(1000, 999999));
+$isoMsg->addData(70, '301');
 
 //get iso string
-print $jak->getISO();
+print $isoMsg->getISO();
+echo "\n\n";
+var_dump($isoMsg->getData());
 ?>
