@@ -31,7 +31,7 @@ class gdmCustomer {
             $this->residencialStatus = $vCustomerStructure['residencialstatus'];
             $this->householdSize = $vCustomerStructure['householdsize'];
         }elseif ($this->customerExist()) {
-            $vCustomerRegister = new dbRequest($configStructure, "local", $vDBPort, $vDBName, $vDBUser, $vDBPassword);
+            $vCustomerRegister = new dbRequest($configStructure['dbType'], $configStructure['dbIP'], $configStructure['dbPort'], $configStructure['dbName'], $configStructure['dbUser'], $configStructure['dbPassword']);
         }
         $this->customerId = $vCustomerId;
     }
