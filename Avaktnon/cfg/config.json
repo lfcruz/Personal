@@ -1,11 +1,11 @@
 {
     "dbConfig": {
         "dbType":"PGS", 
-        "dbIP":"127.0.0.1",
+        "dbIP":"localhost",
         "dbPort":"5432",
-        "dbName":"nontkava",
-        "dbUser":"coreuser",
-        "dbPassword":"ENC(klfoiefk329kdfjk=)"},
+        "dbName":"avaknon",
+        "dbUser":"pgadmin",
+        "dbPassword":"L1nux2kkk"},
     "svrLogs": {
         "logLevel":"DEBUG",
         "logDirectory":"log/",

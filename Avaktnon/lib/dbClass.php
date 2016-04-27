@@ -10,7 +10,7 @@ class dbRequest {
         $this->connectorStructure['dbName'] = $vDBName;
         $this->connectorStructure['dbUser'] = $vDBUser;
         $this->connectorStructure['dbPassword'] = $vDBPassword;
-        switch ($connStruct['dbType']) {
+        switch ($this->connectorStructure['dbType']) {
             case "ORA":
                 $this->setQuery("select * from dual",Array());
                 break;
@@ -77,7 +77,7 @@ class dbRequest {
                     }
                 }
                 pg_close($dbConnector);
-            
+                break;
             default:
                 $recordString = false;
                 break;
