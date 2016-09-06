@@ -2,12 +2,12 @@
 class isoPack {
     private $DATA_ELEMENT	= array (
         1	=> array('b', 64, 0),
-        2	=> array('n', 19, 0),
+        2	=> array('n', 19, 2),
         3	=> array('n', 6, 0),
         4	=> array('n', 12, 0),
         5	=> array('n', 12, 0),
         6	=> array('n', 12, 0),
-        7	=> array('an', 10, 0),
+        7	=> array('n', 10, 0),
         8	=> array('n', 8, 0),
         9	=> array('n', 8, 0),
         10	=> array('n', 8, 0),
@@ -23,7 +23,7 @@ class isoPack {
         20	=> array('n', 3, 0),
         21	=> array('n', 3, 0),
         22	=> array('n', 3, 0),
-        23	=> array('n', 3, 0),
+        23	=> array('n', 4, 0),
         24	=> array('n', 3, 0),
         25	=> array('n', 2, 0),
         26	=> array('n', 2, 0),
@@ -31,7 +31,7 @@ class isoPack {
         28	=> array('n', 8, 0),
         29	=> array('an', 9, 0),
         30	=> array('n', 8, 0),
-        31	=> array('an', 9, 0),
+        31	=> array('an', 2, 0),
         32	=> array('n', 11, 1),
         33	=> array('n', 11, 1),
         34	=> array('an', 28, 1),
@@ -41,15 +41,15 @@ class isoPack {
         38	=> array('an', 6, 0),
         39	=> array('an', 2, 0),
         40	=> array('an', 3, 0),
-        41	=> array('ans', 8, 0),
-        42	=> array('ans', 15, 0),
+        41	=> array('ans', 9, 4),
+        42	=> array('ans', 15, 3),
         43	=> array('ans', 40, 0),
         44	=> array('an', 25, 1),
         45	=> array('an', 76, 1),
         46	=> array('an', 999, 1),
         47	=> array('an', 999, 1),
         48	=> array('ans', 119, 1),
-        49	=> array('an', 3, 0),
+        49	=> array('n', 4, 0),
         50	=> array('an', 3, 0),
         51	=> array('a', 3, 0),
         52	=> array('an', 16, 0),
@@ -59,11 +59,11 @@ class isoPack {
         56	=> array('ans', 999, 1),
         57	=> array('ans', 999, 1),
         58	=> array('ans', 999, 1),
-        59	=> array('ans', 99, 1),
+        59	=> array('ans', 9, 5),
         60	=> array('ans', 60, 1),
         61	=> array('ans', 99, 1),
         62	=> array('ans', 999, 1),
-        63	=> array('ans', 999, 1),
+        63	=> array('ans', 999, 2),
         64	=> array('b', 16, 0),
         65	=> array('b', 16, 0),
         66	=> array('n', 1, 0),
@@ -146,18 +146,18 @@ class isoPack {
         $result	= "";
 
         //Numeric
-        if ($data_element[0]=='n' && is_numeric($data) && strlen($data)<=$data_element[1]) {
-            $data	= str_replace(".", "", $data);
-            
-            if ($data_element[2]==0) {
-                $result	= str_pad($data, $data_element[1], "0", STR_PAD_LEFT);
-                        //sprintf("%0". $data_element[1] ."s", $data);
-            }
-            else {
-                if (strlen($data) <= $data_element[1]) {                
+        if ($data_element[0] == 'n' && is_numeric($data) && strlen($data) <= $data_element[1]) {
+            $data = str_replace(".", "", $data);
+            switch ($data_element[2]) {
+                case 1:
+                    $result = str_pad($data, $data_element[1], "0", STR_PAD_RIGHT);
+                    break;
+                case 2:
                     $result = str_pad(strval(strlen($data)),strlen($data_element[1]), "0", STR_PAD_LEFT).$data;
-                            //sprintf("%0". strlen($data_element[1])."d", strlen($data)). $data;
-                }
+                    break;
+                default:
+                    $result = str_pad($data, $data_element[1], "0", STR_PAD_LEFT);
+                    break;
             }
         }
 
@@ -166,21 +166,25 @@ class isoPack {
             ($data_element[0]=='an' && ctype_alnum($data) && strlen($data)<=$data_element[1]) ||
             ($data_element[0]=='z' && strlen($data)<=$data_element[1]) ||
             ($data_element[0]=='ans' && strlen($data)<=$data_element[1])) {
-
-            if ($data_element[2]==0) {
-                $result	= str_pad($data, $data_element[1], " ", STR_PAD_RIGHT);
-                        //sprintf("%s ". $data_element[1], $data);
-            }elseif ($data_element[2]==1) {
-                if (strlen($data) <= $data_element[1]) {                
+            switch ($data_element[2]){
+                case 1:
+                    $result = str_pad($data, $data_element[1], "0", STR_PAD_LEFT);
+                    break;
+                case 2:
                     $result = str_pad(strval(strlen($data)),strlen($data_element[1]), "0", STR_PAD_LEFT).$data;
-                            //sprintf("%0". strlen($data_element[1])."s", strlen($data)). $data;
-                }
-            }else {
-                if (strlen($data) <= $data_element[1]) {                
-                    //$result = $data;
-                    $result = str_pad(strval(strlen($data)/2),strlen($data_element[1]) + 1, "0", STR_PAD_LEFT).$data;
-                            //sprintf("%0". strlen($data_element[1])."s", strlen($data)). $data;
-                }
+                    break;
+                case 3:
+                    $result = str_pad($data, $data_element[1], "0", STR_PAD_RIGHT);
+                    break;
+                case 4:
+                    $result = $data;
+                    break;
+                case 5:
+                    $result = str_pad(strval(strlen($data)),strlen($data_element[1]), " ", STR_PAD_LEFT).$data;
+                    break;
+                default:
+                    $result = $result = str_pad($data, $data_element[1], " ", STR_PAD_RIGHT);;
+                    break;
             }
          }
 
@@ -383,6 +387,11 @@ class isoPack {
     //Get Data Array
     public function getData() {
         return $this->_data;
+    }
+    
+    //Get Bit
+    public function getBit($bitID) {
+        return $this->_data[$bitID];
     }
 
     //Get Bitmap

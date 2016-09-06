@@ -55,7 +55,7 @@ class isoPack {
         52	=> array('an', 16, 0),
         53	=> array('an', 18, 0),
         54	=> array('an', 120, 0),
-        55	=> array('ans', 999, 2),
+        55	=> array('ans', 999, 1),
         56	=> array('ans', 999, 1),
         57	=> array('ans', 999, 1),
         58	=> array('ans', 999, 1),
@@ -150,13 +150,11 @@ class isoPack {
             $data	= str_replace(".", "", $data);
             
             if ($data_element[2]==0) {
-                $result	= str_pad($data, $data_element[1], "0", STR_PAD_LEFT);
-                        //sprintf("%0". $data_element[1] ."s", $data);
+                $result	= sprintf("%0". $data_element[1] ."s", $data);
             }
             else {
                 if (strlen($data) <= $data_element[1]) {                
-                    $result = str_pad(strval(strlen($data)),strlen($data_element[1]), "0", STR_PAD_LEFT).$data;
-                            //sprintf("%0". strlen($data_element[1])."d", strlen($data)). $data;
+                    $result	= sprintf("%0". strlen($data_element[1])."d", strlen($data)). $data;
                 }
             }
         }
@@ -168,21 +166,14 @@ class isoPack {
             ($data_element[0]=='ans' && strlen($data)<=$data_element[1])) {
 
             if ($data_element[2]==0) {
-                $result	= str_pad($data, $data_element[1], " ", STR_PAD_RIGHT);
-                        //sprintf("%s ". $data_element[1], $data);
-            }elseif ($data_element[2]==1) {
+                $result	= sprintf("% ". $data_element[1] ."s", $data);
+            } 
+            else {
                 if (strlen($data) <= $data_element[1]) {                
-                    $result = str_pad(strval(strlen($data)),strlen($data_element[1]), "0", STR_PAD_LEFT).$data;
-                            //sprintf("%0". strlen($data_element[1])."s", strlen($data)). $data;
-                }
-            }else {
-                if (strlen($data) <= $data_element[1]) {                
-                    //$result = $data;
-                    $result = str_pad(strval(strlen($data)/2),strlen($data_element[1]) + 1, "0", STR_PAD_LEFT).$data;
-                            //sprintf("%0". strlen($data_element[1])."s", strlen($data)). $data;
+                    $result	= sprintf("%0". strlen($data_element[1])."s", strlen($data)). $data;
                 }
             }
-         }
+        }
 
         //Bit
         if ($data_element[0]=='b' && strlen($data)<=$data_element[1]) {
