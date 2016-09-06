@@ -8,5 +8,4 @@ include_once "../../lib/requestClass.php";
     $response = $request->process();
     header($response["http_rsp_code"]);
     echo json_encode($response["proc_rsp_code"]);
-    
 ?>

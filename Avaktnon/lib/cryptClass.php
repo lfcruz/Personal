@@ -1,6 +1,8 @@
 <?php
 class cryptChain {
-    private $skey = 'vu3DH{z|qQx6ROcK)s6?"1+?c3g(^#E38$Vd8kaJa2MG4A9C4XmuhkP540`nN0X';
+    private $skey = null;
+    private $xkey = 'vu3DH{z|qQx6ROcK)s6?"1+?c3g(^#E38$Vd8kaJa2MG4A9C4XmuhkP540`nN0X';
+    private $ikey = '@baYk_/n/[@EBC&en#j\MZ5\@Yak3LNj4WgV~fag}cWpnQmzf(:$?+_N:~dL:$]Y';
     public $charChain = null;
 
     private  function encode($salt = null){ 
@@ -34,11 +36,16 @@ class cryptChain {
     public function pwdHash($salt = null){
         $result = null;
         if(!$salt){
+            $this->skey = $this->xkey;
+            $this->charChain = $this->decode();
             $salt = openssl_random_pseudo_bytes(16,$cstrong);
+            $this->skey = $this->ikey;
             $result = Array("pwd_hash" => hash_hmac(sha512, $this->charChain, $salt),
                             "iterativechain" => $this->encode($salt));
         }else {
+            $this->skey = $this->ikey;
             $salt = $this->decode($salt);
+            $this->skey = $this->xkey;
             $this->charChain = $this->decode();
             $result = hash_hmac(sha512, $this->charChain, $salt);
         }
