@@ -45,6 +45,11 @@ class coreRequest {
         
     }
     
+    private function validateSession($vSessionId){
+        $dbConnector = new dbRequest($this->conf->structure["dbConfig"]["dbType"], $this->conf->structure["dbConfig"]["dbIP"], $this->conf->structure["dbConfig"]["dbPort"], $this->conf->structure["dbConfig"]["dbName"], $this->conf->structure["dbConfig"]["dbUser"], $this->conf->structure["dbConfig"]["dbPassword"]);
+        $dbConnector->setQuery("select  from active_sessions where sessionid = $1", $parameters);
+    }
+    
     private function generateResponse($vErrorCode){
         $dbConnector = new dbRequest($this->conf->structure["dbConfig"]["dbType"], $this->conf->structure["dbConfig"]["dbIP"], $this->conf->structure["dbConfig"]["dbPort"], $this->conf->structure["dbConfig"]["dbName"], $this->conf->structure["dbConfig"]["dbUser"], $this->conf->structure["dbConfig"]["dbPassword"]);
         $dbConnector->setQuery("select * from error_codes where errorcode_id = $1", Array($vErrorCode));

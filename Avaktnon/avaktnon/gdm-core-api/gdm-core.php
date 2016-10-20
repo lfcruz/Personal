@@ -1,7 +1,9 @@
 <?php 
 session_start();
 include_once "../../lib/requestClass.php";
-    $vRequest = $_REQUEST;
+    $vRQ = explode('/', trim($_SERVER['PATH_INFO'],'/'));
+    var_dump($vRQ);
+    $vRequest = $vRQ;
     $vRequest['body'] = json_decode(file_get_contents('php://input'),true);
     $vRequest['method'] = $_SERVER['REQUEST_METHOD'];
     $request = new coreRequest($vRequest);
