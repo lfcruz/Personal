@@ -71,9 +71,9 @@ class dbRequest {
                     $recordString = Array();
                 }else {
                     $recordString = pg_fetch_all($queryResult);
-                    if(!(substr($this->queryStructure['dbQuery'], 1, 6) == 'select')){
+                    if(!(substr($this->queryStructure['dbQuery'], 0, 6) == 'select')){
                         pg_prepare($dbConnector,'commit','commit');
-                        pg_exec($dbConnector, 'commit');
+                        $recordString = pg_exec($dbConnector, 'commit');
                     }
                 }
                 pg_close($dbConnector);

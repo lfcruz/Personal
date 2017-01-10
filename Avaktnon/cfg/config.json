@@ -3,7 +3,7 @@
         "dbType":"PGS", 
         "dbIP":"localhost",
         "dbPort":"5432",
-        "dbName":"avaknon",
+        "dbName":"avaktnon",
         "dbUser":"pgadmin",
         "dbPassword":"L1nux2kkk"},
     "svrLogs": {

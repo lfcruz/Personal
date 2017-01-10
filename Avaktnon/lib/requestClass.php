@@ -13,9 +13,10 @@ class coreRequest {
     }
     
     public function process (){
+        $httpResponse = $this->generateResponse(E_INTERNAL);
         switch ($this->httpRequest["method"]){
             case "POST":
-                switch ($this->httpRequest["process"]){
+                switch ($this->httpRequest[0]){
                     case "login":
                         $httpResponse = $this->handlerLogin();
                         break;
@@ -37,6 +38,9 @@ class coreRequest {
                 break;
             case "DELETE":
                 break;
+            case "GET":
+                
+                break;
             default:
                 $httpResponse = $this->generateResponse(E_METHOD);
                 break;
@@ -52,11 +56,11 @@ class coreRequest {
     
     private function generateResponse($vErrorCode){
         $dbConnector = new dbRequest($this->conf->structure["dbConfig"]["dbType"], $this->conf->structure["dbConfig"]["dbIP"], $this->conf->structure["dbConfig"]["dbPort"], $this->conf->structure["dbConfig"]["dbName"], $this->conf->structure["dbConfig"]["dbUser"], $this->conf->structure["dbConfig"]["dbPassword"]);
-        $dbConnector->setQuery("select * from error_codes where errorcode_id = $1", Array($vErrorCode));
+        $dbConnector->setQuery("select * from error_codes where error_code = $1", Array($vErrorCode));
         $responseStructure = Array("http_rsp_code" => null,
                                    "proc_rsp_code" => null);
         $responseStructure["proc_rsp_code"] = $dbConnector->execQry();
-        switch (substr($vErrorCode, 1, 1)){
+        switch (substr($vErrorCode, 0, 1)){
             case "0":
                 $responseStructure["http_rsp_code"] = HTTP_OK;
                 break;
@@ -75,9 +79,9 @@ class coreRequest {
     
     private function handlerLogin(){
         $data = null;
-        $customer = new gdmCustomer($this->httpRequest["id"]);
+        $customer = new gdmCustomer($this->httpRequest[1]);
         if ($customer->status){
-            switch ($customer->validateSecure($this->httpRequest["body"]["password"])){
+            switch ($customer->validateSecure($this->httpRequest["body"]["securechain"])){
                 case null:
                     $data = $this->generateResponse(W_ACCOUNT_EXPIRING);
                     break;
@@ -96,15 +100,19 @@ class coreRequest {
 
     private function handlerSignin(){
         $data = null;
-        $customer = new gdmCustomer($this->httpRequest["id"], $this->httpRequest["body"]);
+        $customer = new gdmCustomer($this->httpRequest[1], $this->httpRequest["body"]);
         if (!$customer->status){
             if($customer->validStructure){
-                
+                if($customer->saveCustomerRecord()){
+                    $data = $this->generateResponse(PROC_OK);
+                }else {
+                    $data = $this->generateResponse(E_INTERNAL);
+                }
             }else {
                 $data = $this->generateResponse(E_INVALID_DATA);
             }
         }else {
-            $data = $this->generateResponse(E_ACCOUNT_EXIST);
+            $data = $this->generateResponse(E_ACCOUNT_EXIST); 
         }
         return $data;
         
