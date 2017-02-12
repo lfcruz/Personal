@@ -1,0 +1,19 @@
+connection : resource(5) of type (PC/SC Connection)
+array(7) {
+  ["set"]=>
+  string(12) "DE8957FC9000"
+  ["key"]=>
+  string(4) "9000"
+  ["keyvalid"]=>
+  string(4) "9000"
+  ["sector0"]=>
+  string(36) "DE8957FCFC880400C8380020000000159000"
+  ["sector1"]=>
+  string(36) "3580000004D0FC40100684029F5343F19000"
+  ["sector2"]=>
+  string(36) "343F10000000000000000000000000009000"
+  ["sector3"]=>
+  string(36) "000000000000696789000000000000009000"
+}
+[lcruz@lfcruzd scardReader]$ 
+
