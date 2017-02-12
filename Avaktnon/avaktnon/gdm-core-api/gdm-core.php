@@ -5,7 +5,6 @@ include_once "../../lib/requestClass.php";
     $vRequest = $vRQ;
     $vRequest['body'] = json_decode(file_get_contents('php://input'),true);
     $vRequest['method'] = $_SERVER['REQUEST_METHOD'];
-    //var_dump($vRequest);
     $request = new coreRequest($vRequest);
     $response = $request->process();
     header($response["http_rsp_code"]);

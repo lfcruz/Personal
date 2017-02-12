@@ -19,7 +19,7 @@ define("E_INTERNAL","9999");
 define("E_METHOD","9901");
 define("E_PROCESS","9902");
 define("E_AUTH_FAILED","9903");
-define("E_INVALID_FORM","9904");
+define("E_INVALID_ACCOUNT","9904");
 define("E_INVALID_DATA","9005");
 define("E_INVALID_SESSION","90");
 

@@ -25,11 +25,14 @@ class coreRequest {
                     case "signin":
                         $httpResponse = $this->handlerSignin();
                         break;
-                    case "update":
-                        $httpResponse = $this->handlerUpdate();
+                    case "updateprofile":
+                        $httpResponse = $this->handlerUpdateProfile();
                         break;
-                    case "retrieve":
-                        $httpResponse = $this->handlerRetrieve();
+                    case "updateservices":
+                        $httpResponse = $this->handlerUpdateServices();
+                        break;
+                    case "addaccounts":
+                        $httpResponse = $this->handlerAddAccounts();
                         break;
                     default:
                         $httpResponse = $this->generateResponse(E_PROCESS);
@@ -37,9 +40,26 @@ class coreRequest {
                 }
                 break;
             case "DELETE":
+                switch ($this->httpRequest[0]){
+                    case "deleteaccount":
+                        $httpResponse = $this->handlerDeleteAccount();
+                        break;
+                    case "deleteservice":
+                        $httpResponse = $this->handlerDeleteServices();
+                        break;
+                    default:
+                        $httpResponse = $this->generateResponse(E_PROCESS);
+                        break;
+                }
                 break;
             case "GET":
-                
+                switch ($this->httpRequest[0]){
+                    case "retrieve":
+                        $httpResponse = $this->handlerRetrieveProfile();
+                        break;
+                    default:
+                        break;
+                }
                 break;
             default:
                 $httpResponse = $this->generateResponse(E_METHOD);
@@ -52,7 +72,7 @@ class coreRequest {
     private function validateSession($vSessionId){
         $dbConnector = new dbRequest($this->conf->structure["dbConfig"]["dbType"], $this->conf->structure["dbConfig"]["dbIP"], $this->conf->structure["dbConfig"]["dbPort"], $this->conf->structure["dbConfig"]["dbName"], $this->conf->structure["dbConfig"]["dbUser"], $this->conf->structure["dbConfig"]["dbPassword"]);
         $dbConnector->setQuery("select  from active_sessions where sessionid = $1", $parameters);
-    }
+    }//Depricated.
     
     private function generateResponse($vErrorCode){
         $dbConnector = new dbRequest($this->conf->structure["dbConfig"]["dbType"], $this->conf->structure["dbConfig"]["dbIP"], $this->conf->structure["dbConfig"]["dbPort"], $this->conf->structure["dbConfig"]["dbName"], $this->conf->structure["dbConfig"]["dbUser"], $this->conf->structure["dbConfig"]["dbPassword"]);
@@ -75,7 +95,7 @@ class coreRequest {
                 break;
         }
         return $responseStructure;
-    }
+    }//Done.
     
     private function handlerLogin(){
         $data = null;
@@ -96,7 +116,7 @@ class coreRequest {
             $data = $this->generateResponse(E_AUTH_FAILED);
         }
         return $data;
-    }
+    }//Done.
 
     private function handlerSignin(){
         $data = null;
@@ -116,13 +136,49 @@ class coreRequest {
         }
         return $data;
         
-    }
+    }//Done.
     
-    private function handlerUpdate(){
-    }
+    private function handlerUpdateProfile(){
+        $data = null;
+        $customer = new gdmCustomer($this->httpRequest[1], $this->httpRequest["body"]);
+        if($customer->status){
+            if($customer->validStructure and array_key_exists('profile', $this->httpRequest["body"])){
+                foreach ($this->httpRequest["body"]["profile"] as $profilekey => $profilekeydata){
+                    if($customer->customerProfile[$profilekey] !== $profilekeydata){
+                        $customer->customerProfile[$profilekey] = $profilekeydata;
+                    }
+                }
+                if($customer->updateCustomerProfile()){
+                    $data = $this->generateResponse(PROC_OK);
+                }else {
+                    $data = $this->generateResponse(E_INTERNAL);
+                }
+            }else {
+                $data = $this->generateResponse(E_INVALID_DATA);
+            }
+        }else {
+            $data = $this->generateResponse(E_INVALID_ACCOUNT); 
+        }
+        return $data;
+    }//Done.
     
-    private function handlerRetrieve(){
-    }
+    private function handlerRetrieveProfile(){
+        $data = null;
+        $customer = new gdmCustomer($this->httpRequest[1]);
+        if ($customer->status){
+            if(!empty($customer->customerProfile)){
+                $data = $this->generateResponse(PROC_OK);
+                $data['proc_rsp_code']['profile'] = $customer->customerProfile;
+                $data['proc_rsp_code']['accounts'] = $customer->customerAccounts;
+                $data['proc_rsp_code']['services'] = $customer->customerServices;
+            }else {
+                $data = $this->generateResponse(E_INTERNAL);
+            }
+        }else {
+            $data = $this->generateResponse(E_INVALID_ACCOUNT);
+        }
+        return $data;    
+    }//Done.
  
 }
 
