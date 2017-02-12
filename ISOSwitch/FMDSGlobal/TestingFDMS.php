@@ -4,7 +4,7 @@ include_once 'socketServer.php';
 
 $jak	= new isoPack();
 $isoprint = "";
-$isoServer = new socketProcessor("localhost", 18583, "C");
+$isoServer = new socketProcessor("localhost", 28583, "C");
 
 $jak->addMTI("0100");
 //$jak->addData(2, "4012000033330026");
