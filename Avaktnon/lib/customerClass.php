@@ -71,15 +71,11 @@ class gdmCustomer {
                     $result = (trim($structType["name"]) !== null and trim($structType["name"]) !== "") ?  
                         (trim($structType["lastname"]) !== null and trim($structType["lastname"]) !== "") ? 
                             (filter_var($structType["email"], FILTER_VALIDATE_EMAIL) and trim($structType["email"]) !== "") ? 
-                                (trim($structType["country"]) !== null and trim($structType["country"]) !== "") ? 
-                                    (trim($structType["state"]) !== null and trim($structType["state"]) !== "") ? 
-                                        (trim($structType["income"]) !== null and trim($structType["income"]) !== "" and intval($structType["income"]) !== 0) ?
-                                            (trim($structType["fixexpenses"]) !== null and trim($structType["fixexpenses"]) !== "" and intval($structType["fixexpenses"]) !== 0) ? true : false
-                                        : false 
-                                    : false 
+                                (trim($structType["income"]) !== null and trim($structType["income"]) !== "" and intval($structType["income"]) !== 0) ?
+                                    (trim($structType["fixexpenses"]) !== null and trim($structType["fixexpenses"]) !== "" and intval($structType["fixexpenses"]) !== 0) ? true : false 
                                 : false 
                             : false 
-                        : false 
+                        : false  
                     : false;
                     break;
                 case 'secure':
