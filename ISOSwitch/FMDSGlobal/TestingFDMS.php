@@ -1,23 +1,26 @@
 <?php
 include_once 'isoPackagerFDMS.php';
-include_once 'socketServer.php';
+include_once '../lib/socketServer.php';
 
 $jak	= new isoPack();
+$rak = new isoPack();
 $isoprint = "";
 $isoServer = new socketProcessor("localhost", 28583, "C");
 
 $jak->addMTI("0100");
 //$jak->addData(2, "4012000033330026");
 //$jak->addData(2, "4921062576101008");
-$jak->addData(2, "5424180279791732");
+$jak->addData(2, "377880804443745");
+//$jak->addData(2, "5424180279791732");
 $jak->addData(3, "000000");
 $jak->addData(4, "15.14");
 $jak->addData(7, gmdate('mdHis'));
 $jak->addData(11, "000025");
 $jak->addData(12, date('His'));
 $jak->addData(13, date('md'));
-$jak->addData(14, "2010");
-//$jak->addData(14, "2105");
+$jak->addData(14, "2022"); //AMEX
+//$jak->addData(14, "2010"); //MC VS2
+//$jak->addData(14, "2105"); //VS1
 //$jak->addData(14, "2010");
 $jak->addData(18, "4722");
 $jak->addData(22, "018");
@@ -25,7 +28,8 @@ $jak->addData(24, "001");
 $jak->addData(25, "08");
 $jak->addData(31, "01");
 //$jak->addData(37, "1");
-$jak->addData(41, "101017389");
+$jak->addData(41, "1325894");
+//$jak->addData(41, "101017389");
 $jak->addData(42, "39039800016");
 $jak->addData(49, "214");
 //$jak->addData(59, " ");
@@ -75,6 +79,12 @@ $isoprint = pack('n*', $isoLength).$isoprint;
 $isoprint = pack('H*',"02464402").$isoprint;
 $isoprint .= pack('H*',"03464403");
 print_r($isoprint);echo "\n\n\n";
-echo $isoServer->sendMessage($isoprint);
-echo "\n\n\n";
+$response =  $isoServer->sendMessage($isoprint);
+$isoresponse = unpack('H*', $response);
+var_dump($isoresponse);
+$rak->addISO(substr($isoresponse[1], 12, strlen($isoprint)-12));
+
+echo 'MTI: '. $rak->getMTI(). "\n";
+echo 'Bitmap: '. $rak->getBitmap(). "\n";
+echo 'Data Element: '; print_r($rak->getData());echo "\n\n\n";
 ?>
