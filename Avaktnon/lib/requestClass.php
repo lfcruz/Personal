@@ -1,4 +1,4 @@
-<?php
+ <?php
 include_once "customerClass.php";
 include_once "constants.php";
 include_once "dbClass.php";
