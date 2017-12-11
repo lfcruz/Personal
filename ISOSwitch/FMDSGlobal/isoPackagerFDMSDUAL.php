@@ -31,7 +31,7 @@ class isoPack {
         28	=> array('n', 8, 0),
         29	=> array('an', 9, 0),
         30	=> array('n', 8, 0),
-        31	=> array('an', 1, 4),
+        31	=> array('an', 1, 2),
         32	=> array('n', 11, 1),
         33	=> array('n', 11, 1),
         34	=> array('an', 28, 1),
