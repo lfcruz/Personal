@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
-<title>'tilMoney ALPHA</title>
+<title>Easy Feeder</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="icon" href="ico/tilmoney.ico" type="image/x-icon" />
-<link rel="stylesheet" href="css/w3.css">
+<link rel="icon" href="ico/easyfeeder_Logo.ico" type="image/x-icon" />
+<link rel="stylesheet" href="css/w3v5.css">
 <!--link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway" -->
 <link rel="stylesheet" href="fonts/fonts-googleapis1.woff2">
 <link rel="stylesheet" href="fonts/fonts-googleapis2.woff2">
@@ -13,49 +13,57 @@
 body,h1 {font-family: "Raleway", sans-serif}
 body, html {height: 100%}
 .bgimg {
-    background-image: url('img/frontImage04.jpg');
+    background-image: url('img/easyfeeder_Logo.png');
     min-height: 100%;
+    background-repeat: no-repeat;
     background-position: center;
-    background-size: cover;
+    background-size: contain;
 }
 </style>
 <body>
     <div class="bgimg w3-display-container w3-animate-opacity">
         <div class="w3-display-topleft w3-padding-large w3-xlarge">
-            <a class="w3-button-floating" href="#" onclick="document.getElementById('login').style.display='block'">Login</a>
+            <button onclick="document.getElementById('wireless').style.display='block'" class="w3-btn">Wireless Configuration</button>
         </div>
         <div class="w3-display-topright w3-padding-large w3-xlarge">
-            <button onclick="document.getElementById('signin').style.display='block'" class="w3-btn">Sign-In</button>
-        </div>
-        <div class="w3-display-middle">
-            <h1 class="w3-jumbo w3-animate-top w3-text-shadow" style="color: #00ffff">'tilMoney</h1>
-            <hr class="w3-border-grey" style="margin:auto;width:40%">
-            <p class="w3-large w3-center" style="color:black">COMING SOON</p>
+            <button onclick="document.getElementById('configuration').style.display='block'" class="w3-btn">Scheduler Configuration</button>
         </div>
         <div class="w3-display-bottomleft w3-padding-large">
-            Powered by <a href="https://www.crossTechnologies.com" target="_blank">
-                <!--img class="w3-small w3-border-cyan" src="img/crossTechnologiesLogo.png"-->
+            Powered by <a href="https://www.crossTechnologies.com" target="_blank">Cross Technologies LTD
+                <!--img class="w3-small w3-border-cyan" src="img/crossTechnologiesMiniLogo.jpg"-->
             </a>
         </div>
     </div>
     
-    <!-- Sign-In Form -->
-    <div id="signin" class="w3-modal">
-        <div class="w3-modal-content w3-card-8 w3-animate-zoom" style="max-width:600px">
-            <div class="w3-center w3-cyan"><br><br>
-                <span class="w3-xlarge w3-container w3-padding-8 w3-display-topleft"><b>Signing Up</b></span>
-                <span onclick="document.getElementById('signin').style.display='none'" class="w3-closebtn w3-container w3-padding-8 w3-display-topright" title="Close Modal">&times;</span>
+    <!-- Scheduler Form -->
+    <div id="configuration" class="w3-modal">
+        <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">
+            <div class="w3-center w3-cyan"><br>
+                <span onclick="document.getElementById('configuration').style.display='none'" class="w3-large w3-container w3-padding-16 w3-display-topright" title="Close Modal"><i class="fa fa-close"></i></span>
+                <img src="img/easyfeeder_Logo.png" alt="Avatar" style="width:30%" class="w3-circle w3-margin-top"><br>
+                <span class="w3-margin-top w3-padding w3-hide-small">SCHEDULER CONFIGURATION</span>
             </div>
             <form class="w3-container" action="">
                 <div class="w3-section">
-                    <input class="w3-input w3-border w3-margin-bottom" type="text" placeholder="First Name" name="name" required>
-                    <input class="w3-input w3-border w3-margin-bottom" type="text" placeholder="Last Name" name="lastname" required>
-                    <input class="w3-input w3-border w3-margin-bottom" type="text" placeholder="Email" name="email" required>
-                    <input class="w3-input w3-border w3-margin-bottom" type="password" placeholder="Password" name="psw" required>
-                    <input class="w3-input w3-border w3-margin-bottom" type="password" placeholder="Repeat Password" name="psw-repeat" required>
-                    <p>By creating an account you agree to our <a style="color:cyan" href="#">Terms & Privacy</a>.</p>
-                    <div class="clearfix">
-                        <button type="submit" class="w3-btn w3-green">Sign Up</button>
+                    <div class="w3-bar w3-black">
+                        <input type="button" class="w3-bar-item w3-button" onclick="openMeal('Breakfast')" value="Breakfast">
+                        <input type="button" class="w3-bar-item w3-button" onclick="openMeal('Lunch')" value="Lunch">
+                        <input type="button" class="w3-bar-item w3-button" onclick="openMeal('Dinner')" value="Dinner">
+                    </div>
+                    <div id="Breakfast" class="meal" style="display:block"><br>
+                        <input class="w3-input w3-border w3-margin-bottom" type="text" placeholder="Breakfast Hour (H24)" name="bhour" id="bhour" required>
+                        <input class="w3-input w3-border w3-margin-bottom" type="text" placeholder="Feeder Duration (seconds)" name="bduration" id="bduration" required>
+                    </div>
+                    <div id="Lunch" class="meal" style="display:none"><br>
+                        <input class="w3-input w3-border w3-margin-bottom" type="text" placeholder="Lunch Hour (H24)" name="lhour" id="lhour" required>
+                        <input class="w3-input w3-border w3-margin-bottom" type="text" placeholder="Feeder Duration (seconds)" name="lduration" id="lduration" required>
+                    </div>
+                    <div id="Dinner" class="meal" style="display:none"><br>
+                        <input class="w3-input w3-border w3-margin-bottom" type="text" placeholder="Dinner Hour (H24)" name="dhour" id="dhour" required>
+                        <input class="w3-input w3-border w3-margin-bottom" type="text" placeholder="Feeder Duration (seconds)" name="dduration" id="dduration" required>
+                    </div>
+                    <div class="w3-section">
+                        <input type="button" class="w3-btn w3-cyan" onclick="saveConfiguration('Scheduler')" value="Save">
                     </div> 
                 </div>
             </form>
@@ -67,26 +75,89 @@ body, html {height: 100%}
         </div>
     </div>
     
-    <!-- Login Form -->
-    <div id="login" class="w3-modal">
-        <div class="w3-modal-content w3-card-8 w3-animate-zoom" style="max-width:300px">
+    <!-- Wireless Form -->
+    <div id="wireless" class="w3-modal">
+        <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">
             <div class="w3-center w3-cyan"><br>
-                <span onclick="document.getElementById('login').style.display='none'" class="w3-closebtn w3-container w3-padding-8 w3-display-topright" title="Close Modal">&times;</span>
-                <img src="img/loginAvatar.jpg" alt="Avatar" style="width:30%" class="w3-circle w3-margin-top">
+                <span onclick="document.getElementById('wireless').style.display='none'" class="w3-large w3-container w3-padding-16 w3-display-topright" title="Close Modal"><i class="fa fa-close"></i></span>
+                <img src="img/easyfeeder_Logo.png" alt="Avatar" style="width:30%" class="w3-circle w3-margin-top"><br>
+                <span class="w3-margin-top w3-padding w3-hide-small">WIRELESS CONFIGURATION</span>
             </div>
-            <form class="w3-container" action="/action_page.php">
+            <form class="w3-container" action="">
                 <div class="w3-section">
-                    <input class="w3-input w3-border w3-margin-bottom" type="text" placeholder="Email" name="usrname" required>
-                    <input class="w3-input w3-border" type="password" placeholder="Password" name="psw" required>
-                    <button class="w3-btn-block w3-green w3-section w3-padding" type="submit">Login</button>
-                    <input class="w3-check w3-margin-top" type="checkbox" checked="checked"> Remember me
+                    <input class="w3-input w3-border w3-margin-bottom" type="text" placeholder="SSID" name="wifissid" id="wifissid" required>
+                    <input class="w3-input w3-border" type="password" placeholder="Password" name="wifipassword" id="wifipassword" required>
+                    <div class="w3-section">
+                        <input type="button" class="w3-btn w3-cyan" onclick="saveConfiguration('Wireless')" value="Save">
+                    </div>
                 </div>
             </form>
-            <div class="w3-container w3-border-top w3-padding-16 w3-light-grey">
-                <button onclick="document.getElementById('login').style.display='none'" type="button" class="w3-btn w3-red">Cancel</button>
-                <span class="w3-right w3-padding w3-hide-small">Forgot <a style="color:cyan" href="#">password?</a></span>
-            </div>
         </div>
     </div>
+    
+    <!-- JS Functions -->
+    <script>
+        function openMeal(mealName) {
+            var i;
+            var x = document.getElementsByClassName("meal");
+            for (i = 0; i < x.length; i++) {
+                x[i].style.display = "none";  
+            }
+            document.getElementById(mealName).style.display = "block";  
+        }
+        function saveConfiguration(dtoType){
+            const objWireless = {
+                ssid:null,
+                password:null,
+                setssid(value){
+                    this.ssid = value;
+                },
+                setpassword(value){
+                    this.password = value;
+                }
+            };
+            const objScheduler = {
+                breakfast:{
+                    hour:null,
+                    duration:null
+                },
+                lunch:{
+                    hour:null,
+                    duration:null
+                },
+                dinner:{
+                    hour:null,
+                    duration:null
+                },
+                setbreakfast(value1, value2){
+                    this.breakfast.hour = value1;
+                    this.breakfast.duration = value2;
+                },
+                setlunch(value1, value2){
+                    this.lunch.hour = value1;
+                    this.lunch.duration = value2;
+                },
+                setdinner(value1, value2){
+                    this.dinner.hour = value1;
+                    this.dinner.duration = value2;
+                }
+            };
+            switch (dtoType){
+                case 'Wireless':
+                    objWireless.setssid(document.getElementById('wifissid').value);
+                    objWireless.setpassword(document.getElementById('wifipassword').value);
+                    alert('Saving '+dtoType+' having: '+JSON.stringify(objWireless));
+                    break;
+                case 'Scheduler': 
+                    objScheduler.setbreakfast(document.getElementById('bhour').value, document.getElementById('bduration').value);
+                    objScheduler.setlunch(document.getElementById('lhour').value, document.getElementById('lduration').value);
+                    objScheduler.setdinner(document.getElementById('dhour').value, document.getElementById('dduration').value);
+                    alert('Saving '+dtoType+' having: '+JSON.stringify(objScheduler));
+                    break;
+                default:
+                    break;
+            }
+        }
+    </script>
 </body>
 </html>
