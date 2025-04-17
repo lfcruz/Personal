@@ -9,6 +9,7 @@
 <link rel="stylesheet" href="fonts/fonts-googleapis1.woff2">
 <link rel="stylesheet" href="fonts/fonts-googleapis2.woff2">
 <link rel="stylesheet" href="css/font-awesome.min.css">
+<script src="js/jquery-1.10.2.min.js"></script>
 <style>
 body,h1 {font-family: "Raleway", sans-serif}
 body, html {height: 100%}
@@ -51,16 +52,16 @@ body, html {height: 100%}
                         <input type="button" class="w3-bar-item w3-button" onclick="openMeal('Dinner')" value="Dinner">
                     </div>
                     <div id="Breakfast" class="meal" style="display:block"><br>
-                        <input class="w3-input w3-border w3-margin-bottom" type="text" placeholder="Breakfast Hour (H24)" name="bhour" id="bhour" required>
-                        <input class="w3-input w3-border w3-margin-bottom" type="text" placeholder="Feeder Duration (seconds)" name="bduration" id="bduration" required>
+                        <input class="w3-input w3-border w3-margin-bottom" type="time" name="bhour" id="bhour" required>
+                        <input class="w3-input w3-border w3-margin-bottom" type="range" name="bduration" id="bduration" min="1" max="60" step="1" value="1" title="Duration in seconds (1-60)"><span class="w3-badge w3-blue w3-large" id="bdurationvalue"></span>
                     </div>
                     <div id="Lunch" class="meal" style="display:none"><br>
-                        <input class="w3-input w3-border w3-margin-bottom" type="text" placeholder="Lunch Hour (H24)" name="lhour" id="lhour" required>
-                        <input class="w3-input w3-border w3-margin-bottom" type="text" placeholder="Feeder Duration (seconds)" name="lduration" id="lduration" required>
+                        <input class="w3-input w3-border w3-margin-bottom" type="time" name="lhour" id="lhour" required>
+                        <input class="w3-input w3-border w3-margin-bottom" type="range" name="lduration" id="lduration" min="1" max="60" step="1" value="1" title="Duration in seconds (1-60)"><span class="w3-badge w3-blue w3-large" id="ldurationvalue"></span>
                     </div>
                     <div id="Dinner" class="meal" style="display:none"><br>
-                        <input class="w3-input w3-border w3-margin-bottom" type="text" placeholder="Dinner Hour (H24)" name="dhour" id="dhour" required>
-                        <input class="w3-input w3-border w3-margin-bottom" type="text" placeholder="Feeder Duration (seconds)" name="dduration" id="dduration" required>
+                        <input class="w3-input w3-border w3-margin-bottom" type="time" name="dhour" id="dhour" required>
+                        <input class="w3-input w3-border w3-margin-bottom" type="range" name="dduration" id="dduration" min="1" max="60" step="1" value="1" title="Duration in seconds (1-60)"><span class="w3-badge w3-blue w3-large" id="ddurationvalue"></span>
                     </div>
                     <div class="w3-section">
                         <input type="button" class="w3-btn w3-cyan" onclick="saveConfiguration('Scheduler')" value="Save">
@@ -96,6 +97,26 @@ body, html {height: 100%}
     </div>
     
     <!-- JS Functions -->
+    <script>
+        var bslider = document.getElementById('bduration');
+        var boutput = document.getElementById('bdurationvalue');
+        var lslider = document.getElementById('lduration');
+        var loutput = document.getElementById('ldurationvalue');
+        var dslider = document.getElementById('dduration');
+        var doutput = document.getElementById('ddurationvalue');
+        boutput.innerHTML = bslider.value;
+        loutput.innerHTML = lslider.value;
+        doutput.innerHTML = dslider.value;
+        bslider.oninput = function(){
+            boutput.innerHTML = this.value;
+        };
+        lslider.oninput = function(){
+            loutput.innerHTML = this.value;
+        };
+        dslider.oninput = function(){
+            doutput.innerHTML = this.value;
+        };
+    </script>
     <script>
         function openMeal(mealName) {
             var i;
