@@ -5,35 +5,30 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="icon" href="ico/easyfeeder_Logo.ico" type="image/x-icon" />
 <link rel="stylesheet" href="css/w3v5.css">
-<!--link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway" -->
-<link rel="stylesheet" href="fonts/fonts-googleapis1.woff2">
-<link rel="stylesheet" href="fonts/fonts-googleapis2.woff2">
 <link rel="stylesheet" href="css/font-awesome.min.css">
-<script src="js/jquery-1.10.2.min.js"></script>
 <style>
-body,h1 {font-family: "Raleway", sans-serif}
-body, html {height: 100%}
-.bgimg {
-    background-image: url('img/easyfeeder_Logo.png');
-    min-height: 100%;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: contain;
-}
+    body,h1 {font-family: "Raleway", sans-serif}
+    body, html {height: 100%}
+    .bgimg {
+        background-image: url('img/easyfeeder_Logo.png');
+        min-height: 100%;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: contain;
+    }
 </style>
 <body>
-    <div class="bgimg w3-display-container w3-animate-opacity">
-        <div class="w3-display-topleft w3-padding-large w3-xlarge">
-            <button onclick="document.getElementById('wireless').style.display='block'" class="w3-btn">Wireless Configuration</button>
-        </div>
-        <div class="w3-display-topright w3-padding-large w3-xlarge">
-            <button onclick="document.getElementById('configuration').style.display='block'" class="w3-btn">Scheduler Configuration</button>
+    <div class="bgimg w3-display-container w3-animate-opacity w3-mobile">
+        <div class="w3-container w3-bar w3-cyan">
+            <button onclick="document.getElementById('wireless').style.display='block'" class="w3-button w3-xlarge w3-mobile">Wireless Configuration</button>
+            <button onclick="document.getElementById('configuration').style.display='block'" class="w3-button w3-xlarge w3-mobile">Scheduler Configuration</button>
+            <button onclick="document.getElementById('manual').style.display='block'" class="w3-button w3-xlarge w3-mobile">Manual Opening</button>
         </div>
         <div class="w3-display-bottomleft w3-padding-large">
             Powered by <a href="https://www.crossTechnologies.com" target="_blank">Cross Technologies LTD
-                <!--img class="w3-small w3-border-cyan" src="img/crossTechnologiesMiniLogo.jpg"-->
             </a>
         </div>
+        
     </div>
     
     <!-- Scheduler Form -->
@@ -64,7 +59,7 @@ body, html {height: 100%}
                         <input class="w3-input w3-border w3-margin-bottom" type="range" name="dduration" id="dduration" min="1" max="60" step="1" value="1" title="Duration in seconds (1-60)"><span class="w3-badge w3-blue w3-large" id="ddurationvalue"></span>
                     </div>
                     <div class="w3-section">
-                        <input type="button" class="w3-btn w3-cyan" onclick="saveConfiguration('Scheduler')" value="Save">
+                        <input type="button" class="w3-btn w3-cyan" id="saveScheduler" onclick="saveConfiguration('Scheduler')" value="Save">
                     </div> 
                 </div>
             </form>
@@ -89,96 +84,15 @@ body, html {height: 100%}
                     <input class="w3-input w3-border w3-margin-bottom" type="text" placeholder="SSID" name="wifissid" id="wifissid" required>
                     <input class="w3-input w3-border" type="password" placeholder="Password" name="wifipassword" id="wifipassword" required>
                     <div class="w3-section">
-                        <input type="button" class="w3-btn w3-cyan" onclick="saveConfiguration('Wireless')" value="Save">
+                        <input type="button" class="w3-btn w3-cyan" id="saveWireless" onclick="saveConfiguration('Wireless')" value="Save">
                     </div>
                 </div>
             </form>
         </div>
     </div>
     
-    <!-- JS Functions -->
-    <script>
-        var bslider = document.getElementById('bduration');
-        var boutput = document.getElementById('bdurationvalue');
-        var lslider = document.getElementById('lduration');
-        var loutput = document.getElementById('ldurationvalue');
-        var dslider = document.getElementById('dduration');
-        var doutput = document.getElementById('ddurationvalue');
-        boutput.innerHTML = bslider.value;
-        loutput.innerHTML = lslider.value;
-        doutput.innerHTML = dslider.value;
-        bslider.oninput = function(){
-            boutput.innerHTML = this.value;
-        };
-        lslider.oninput = function(){
-            loutput.innerHTML = this.value;
-        };
-        dslider.oninput = function(){
-            doutput.innerHTML = this.value;
-        };
-    </script>
-    <script>
-        function openMeal(mealName) {
-            var i;
-            var x = document.getElementsByClassName("meal");
-            for (i = 0; i < x.length; i++) {
-                x[i].style.display = "none";  
-            }
-            document.getElementById(mealName).style.display = "block";  
-        }
-        function saveConfiguration(dtoType){
-            const objWireless = {
-                ssid:null,
-                password:null,
-                setssid(value){
-                    this.ssid = value;
-                },
-                setpassword(value){
-                    this.password = value;
-                }
-            };
-            const objScheduler = {
-                breakfast:{
-                    hour:null,
-                    duration:null
-                },
-                lunch:{
-                    hour:null,
-                    duration:null
-                },
-                dinner:{
-                    hour:null,
-                    duration:null
-                },
-                setbreakfast(value1, value2){
-                    this.breakfast.hour = value1;
-                    this.breakfast.duration = value2;
-                },
-                setlunch(value1, value2){
-                    this.lunch.hour = value1;
-                    this.lunch.duration = value2;
-                },
-                setdinner(value1, value2){
-                    this.dinner.hour = value1;
-                    this.dinner.duration = value2;
-                }
-            };
-            switch (dtoType){
-                case 'Wireless':
-                    objWireless.setssid(document.getElementById('wifissid').value);
-                    objWireless.setpassword(document.getElementById('wifipassword').value);
-                    alert('Saving '+dtoType+' having: '+JSON.stringify(objWireless));
-                    break;
-                case 'Scheduler': 
-                    objScheduler.setbreakfast(document.getElementById('bhour').value, document.getElementById('bduration').value);
-                    objScheduler.setlunch(document.getElementById('lhour').value, document.getElementById('lduration').value);
-                    objScheduler.setdinner(document.getElementById('dhour').value, document.getElementById('dduration').value);
-                    alert('Saving '+dtoType+' having: '+JSON.stringify(objScheduler));
-                    break;
-                default:
-                    break;
-            }
-        }
-    </script>
+    <!-- JS Post Processing -->
+    <script src="js/rangeinput.js"></script>
+    <script src="js/functions.js"></script>
 </body>
 </html>
